@@ -39,6 +39,9 @@
             --card-shadow-hover: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
             --glass-bg: rgba(255, 255, 255, 0.8);
             --glass-border: rgba(255, 255, 255, 0.3);
+            --scrollbar-track: #f1f5f9;
+            --scrollbar-thumb: #cbd5e1;
+            --scrollbar-thumb-hover: #94a3b8;
         }
 
         [data-theme="dark"] {
@@ -53,6 +56,9 @@
             --card-shadow-hover: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
             --glass-bg: rgba(30, 41, 59, 0.8);
             --glass-border: rgba(51, 65, 85, 0.5);
+            --scrollbar-track: #1e293b;
+            --scrollbar-thumb: #475569;
+            --scrollbar-thumb-hover: #64748b;
         }
 
         /* ========================================
@@ -76,6 +82,87 @@
             line-height: 1.6;
             transition: background 0.3s ease, color 0.3s ease;
             overflow-x: hidden;
+        }
+
+        /* ========================================
+           BEAUTIFUL SCROLLBAR STYLES
+        ======================================== */
+        /* Main scrollbar for entire page */
+        ::-webkit-scrollbar {
+            width: 10px;
+            height: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--scrollbar-track);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, var(--accent-primary), var(--accent-secondary));
+            border-radius: 10px;
+            border: 2px solid var(--scrollbar-track);
+            transition: all 0.3s ease;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(180deg, var(--accent-secondary), var(--accent-primary));
+            border: 1px solid var(--scrollbar-track);
+        }
+
+        ::-webkit-scrollbar-corner {
+            background: var(--scrollbar-track);
+        }
+
+        /* Custom scrollbar for modals and containers */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: var(--bg-tertiary);
+            border-radius: 8px;
+            margin: 4px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, var(--accent-primary), var(--accent-secondary));
+            border-radius: 8px;
+            border: 2px solid var(--bg-tertiary);
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(180deg, var(--accent-secondary), var(--accent-primary));
+        }
+
+        /* Thin scrollbar for smaller containers like bank selector */
+        .thin-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        .thin-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+            border-radius: 6px;
+            margin: 8px 0;
+        }
+
+        .thin-scrollbar::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, var(--accent-primary), var(--accent-secondary));
+            border-radius: 6px;
+            opacity: 0.8;
+        }
+
+        .thin-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: var(--accent-primary);
+            opacity: 1;
+        }
+
+        /* Firefox scrollbar support */
+        * {
+            scrollbar-width: thin;
+            scrollbar-color: var(--accent-primary) var(--scrollbar-track);
         }
 
         /* ========================================
@@ -1133,7 +1220,7 @@
         }
 
         /* ========================================
-           MODAL STYLES
+           MODAL STYLES - FIXED SCROLLBAR ISSUES
         ======================================== */
         .modal-overlay {
             position: fixed;
@@ -1151,6 +1238,7 @@
             opacity: 0;
             visibility: hidden;
             transition: all 0.3s ease;
+            overflow: hidden;
         }
 
         .modal-overlay.active {
@@ -1164,10 +1252,12 @@
             width: 100%;
             max-width: 520px;
             max-height: 85vh;
-            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
             transform: scale(0.9) translateY(20px);
             transition: transform 0.3s ease;
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
+            overflow: hidden;
         }
 
         .modal-overlay.active .modal {
@@ -1180,11 +1270,10 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            position: sticky;
-            top: 0;
             background: var(--bg-secondary);
             z-index: 10;
             border-radius: 24px 24px 0 0;
+            flex-shrink: 0;
         }
 
         .modal-title {
@@ -1214,6 +1303,31 @@
 
         .modal-body {
             padding: 1.5rem;
+            overflow-y: auto;
+            overflow-x: hidden;
+            flex: 1;
+            min-height: 0;
+        }
+
+        /* Beautiful scrollbar for modal body */
+        .modal-body::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .modal-body::-webkit-scrollbar-track {
+            background: var(--bg-tertiary);
+            border-radius: 8px;
+            margin: 8px 0;
+        }
+
+        .modal-body::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, var(--accent-primary), var(--accent-secondary));
+            border-radius: 8px;
+            border: 2px solid var(--bg-tertiary);
+        }
+
+        .modal-body::-webkit-scrollbar-thumb:hover {
+            background: var(--accent-primary);
         }
 
         .modal-footer {
@@ -1221,6 +1335,8 @@
             border-top: 1px solid var(--border-color);
             display: flex;
             gap: 1rem;
+            flex-shrink: 0;
+            background: var(--bg-secondary);
         }
 
         /* ========================================
@@ -1453,7 +1569,7 @@
         }
 
         /* ========================================
-           BANK SELECTOR
+           BANK SELECTOR - FIXED SCROLLBAR
         ======================================== */
         .bank-search-wrapper {
             margin-bottom: 0.75rem;
@@ -1492,10 +1608,43 @@
             gap: 0.5rem;
             max-height: 220px;
             overflow-y: auto;
+            overflow-x: hidden;
             padding: 0.75rem;
             background: var(--bg-tertiary);
             border-radius: 12px;
             border: 2px solid var(--border-color);
+            position: relative;
+        }
+
+        /* Beautiful scrollbar for bank selector */
+        .bank-selector::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .bank-selector::-webkit-scrollbar-track {
+            background: transparent;
+            border-radius: 6px;
+            margin: 8px 0;
+        }
+
+        .bank-selector::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, var(--accent-primary), var(--accent-secondary));
+            border-radius: 6px;
+        }
+
+        .bank-selector::-webkit-scrollbar-thumb:hover {
+            background: var(--accent-primary);
+        }
+
+        /* Hide scrollbar corner/button issues */
+        .bank-selector::-webkit-scrollbar-button {
+            display: none;
+            height: 0;
+            width: 0;
+        }
+
+        .bank-selector::-webkit-scrollbar-corner {
+            display: none;
         }
 
         .bank-option {
@@ -1508,6 +1657,7 @@
             border: 2px solid transparent;
             transition: all 0.2s ease;
             background: var(--bg-secondary);
+            flex-shrink: 0;
         }
 
         .bank-option:hover {
@@ -2439,6 +2589,115 @@
         }
 
         /* ========================================
+           ACCOUNT MODAL - FIXED SCROLLBAR
+        ======================================== */
+        .account-modal-body {
+            overflow-y: auto;
+            overflow-x: hidden;
+            max-height: calc(85vh - 80px);
+        }
+
+        .account-modal-body::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .account-modal-body::-webkit-scrollbar-track {
+            background: var(--bg-tertiary);
+            border-radius: 8px;
+            margin: 8px 0;
+        }
+
+        .account-modal-body::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, var(--accent-primary), var(--accent-secondary));
+            border-radius: 8px;
+            border: 2px solid var(--bg-tertiary);
+        }
+
+        .account-modal-body::-webkit-scrollbar-thumb:hover {
+            background: var(--accent-primary);
+        }
+
+        /* ========================================
+           COPYRIGHT FOOTER
+        ======================================== */
+        .copyright-footer {
+            text-align: center;
+            padding: 2rem 1rem;
+            margin-top: 2rem;
+            border-top: 1px solid var(--border-color);
+            background: var(--bg-secondary);
+        }
+
+        .copyright-footer .logo-mini {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .copyright-footer .logo-mini-icon {
+            width: 32px;
+            height: 32px;
+            background: var(--accent-gradient);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
+        }
+
+        .copyright-footer .logo-mini-text {
+            font-size: 1.1rem;
+            font-weight: 700;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .copyright-text {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+        }
+
+        .copyright-tagline {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            opacity: 0.7;
+        }
+
+        .copyright-tagline .heart {
+            color: #ef4444;
+            animation: heartbeat 1.5s ease infinite;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .copyright-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .copyright-links a {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .copyright-links a:hover {
+            color: var(--accent-primary);
+        }
+
+        /* ========================================
            RESPONSIVE STYLES
         ======================================== */
         @media (max-width: 768px) {
@@ -2495,6 +2754,10 @@
                 width: 56px;
                 height: 56px;
             }
+
+            .copyright-footer {
+                padding: 1.5rem 1rem;
+            }
         }
 
         @media (max-width: 480px) {
@@ -2530,35 +2793,17 @@
             .time-desc {
                 display: none;
             }
-        }
 
-        /* ========================================
-           SCROLLBAR STYLES
-        ======================================== */
-        ::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: var(--bg-tertiary);
-            border-radius: 4px;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: var(--text-muted);
-            border-radius: 4px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--text-secondary);
+            .copyright-links {
+                gap: 1rem;
+            }
         }
 
         /* ========================================
            PRINT STYLES
         ======================================== */
         @media print {
-            .header, .nav-tabs, .add-card-btn, .notification-banner, .fab-add {
+            .header, .nav-tabs, .add-card-btn, .notification-banner, .fab-add, .copyright-footer {
                 display: none !important;
             }
 
@@ -2582,8 +2827,8 @@
             <span class="logo-text">CardGuard</span>
         </div>
         <div class="header-actions">
-            <button class="icon-btn add-btn" id="headerAddBtn" title="Add Card">+</button>
             <button class="icon-btn" id="themeToggle" title="Toggle Theme">🌙</button>
+            <button class="icon-btn" id="accountBtn" title="My Account">👤</button>
         </div>
     </div>
 </header>
@@ -2819,6 +3064,7 @@
                 </div>
             </div>
         </div>
+        </div>
 
         <div class="settings-section">
             <h3 class="settings-section-title">🎨 Appearance</h3>
@@ -2878,6 +3124,22 @@
         </div>
     </section>
 </main>
+
+<!-- Copyright Footer -->
+<footer class="copyright-footer">
+    <div class="logo-mini">
+        <div class="logo-mini-icon">💳</div>
+        <span class="logo-mini-text">CardGuard</span>
+    </div>
+    <p class="copyright-text">© 2024 CardGuard. All rights reserved.</p>
+    <p class="copyright-tagline">Made with <span class="heart">❤️</span> for smart financial management</p>
+    <div class="copyright-links">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">Contact Us</a>
+        <a href="#">About</a>
+    </div>
+</footer>
 
 <!-- Floating Add Button -->
 <button class="fab-add hidden" id="fabAddBtn" title="Add Card">+</button>
@@ -3052,6 +3314,84 @@
             <div class="confirm-actions">
                 <button class="btn btn-secondary" id="confirmCancelBtn">Cancel</button>
                 <button class="btn btn-success" id="confirmOkBtn">Confirm</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Account Modal -->
+<div class="modal-overlay" id="accountModal">
+    <div class="modal" style="max-width: 420px;">
+        <div class="modal-header">
+            <h2 class="modal-title">My Account</h2>
+            <button class="modal-close" id="closeAccountModal">✕</button>
+        </div>
+        <div class="modal-body account-modal-body">
+            <!-- Profile Section -->
+            <div style="text-align: center; padding: 1.5rem 0;">
+                <div style="width: 80px; height: 80px; border-radius: 50%; background: var(--accent-gradient); display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; font-size: 2.5rem;">
+                    👤
+                </div>
+                <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.25rem;">Guest User</h3>
+                <p style="font-size: 0.85rem; color: var(--text-muted);">Welcome to CardGuard</p>
+            </div>
+
+            <!-- Account Stats -->
+            <div style="background: var(--bg-tertiary); border-radius: 14px; padding: 1rem; margin-bottom: 1.5rem;">
+                <div style="display: flex; justify-content: space-around; text-align: center;">
+                    <div>
+                        <div style="font-size: 1.5rem; font-weight: 700; color: var(--accent-primary);" id="accountTotalCards">0</div>
+                        <div style="font-size: 0.75rem; color: var(--text-muted);">Cards</div>
+                    </div>
+                    <div style="width: 1px; background: var(--border-color);"></div>
+                    <div>
+                        <div style="font-size: 1.5rem; font-weight: 700; color: var(--success);" id="accountPaidCards">0</div>
+                        <div style="font-size: 0.75rem; color: var(--text-muted);">Paid</div>
+                    </div>
+                    <div style="width: 1px; background: var(--border-color);"></div>
+                    <div>
+                        <div style="font-size: 1.5rem; font-weight: 700; color: var(--warning);" id="accountPendingCards">0</div>
+                        <div style="font-size: 0.75rem; color: var(--text-muted);">Pending</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Menu Items -->
+            <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                <div class="card-action-item" id="accountProfileBtn">
+                    <div class="action-icon" style="background: rgba(99, 102, 241, 0.1);">👤</div>
+                    <div class="action-text">
+                        <h5>Edit Profile</h5>
+                        <p>Update your name and details</p>
+                    </div>
+                </div>
+                <div class="card-action-item" id="accountNotifBtn">
+                    <div class="action-icon" style="background: rgba(245, 158, 11, 0.1);">🔔</div>
+                    <div class="action-text">
+                        <h5>Notifications</h5>
+                        <p>Manage your reminders</p>
+                    </div>
+                </div>
+                <div class="card-action-item" id="accountBackupBtn">
+                    <div class="action-icon" style="background: rgba(16, 185, 129, 0.1);">💾</div>
+                    <div class="action-text">
+                        <h5>Backup & Sync</h5>
+                        <p>Export or import your data</p>
+                    </div>
+                </div>
+                <div class="card-action-item" id="accountHelpBtn">
+                    <div class="action-icon" style="background: rgba(139, 92, 246, 0.1);">❓</div>
+                    <div class="action-text">
+                        <h5>Help & Support</h5>
+                        <p>Get help with CardGuard</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- App Version -->
+            <div style="text-align: center; margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--border-color);">
+                <p style="font-size: 0.75rem; color: var(--text-muted);">CardGuard v3.0.0</p>
+                <p style="font-size: 0.7rem; color: var(--text-muted); margin-top: 0.25rem;">Made with ❤️ for smart finances</p>
             </div>
         </div>
     </div>
@@ -4217,6 +4557,24 @@
     // MODAL FUNCTIONS
     // ========================================
 
+    function openAccountModal() {
+        // Update stats
+        document.getElementById('accountTotalCards').textContent = state.cards.length;
+
+        let paidCount = 0;
+        for (let i = 0; i < state.cards.length; i++) {
+            if (isCardPaidThisCycle(state.cards[i])) paidCount++;
+        }
+        document.getElementById('accountPaidCards').textContent = paidCount;
+        document.getElementById('accountPendingCards').textContent = state.cards.length - paidCount;
+
+        document.getElementById('accountModal').classList.add('active');
+    }
+
+    function closeAccountModal() {
+        document.getElementById('accountModal').classList.remove('active');
+    }
+
     function openAddCardModal() {
         state.editingCardId = null;
         state.selectedColor = CARD_COLORS[0].id;
@@ -4590,9 +4948,31 @@
         // Theme
         document.getElementById('themeToggle').addEventListener('click', toggleTheme);
 
-        // Add card buttons
-        document.getElementById('headerAddBtn').addEventListener('click', openAddCardModal);
+        // Add card button (floating)
         document.getElementById('fabAddBtn').addEventListener('click', openAddCardModal);
+
+        // Account button
+        document.getElementById('accountBtn').addEventListener('click', openAccountModal);
+        document.getElementById('closeAccountModal').addEventListener('click', closeAccountModal);
+        document.getElementById('accountModal').addEventListener('click', function(e) {
+            if (e.target.id === 'accountModal') closeAccountModal();
+        });
+
+        // Account menu items
+        document.getElementById('accountProfileBtn').addEventListener('click', function() {
+            showToast('Profile settings coming soon!', 'info');
+        });
+        document.getElementById('accountNotifBtn').addEventListener('click', function() {
+            closeAccountModal();
+            switchView('settings');
+        });
+        document.getElementById('accountBackupBtn').addEventListener('click', function() {
+            closeAccountModal();
+            switchView('settings');
+        });
+        document.getElementById('accountHelpBtn').addEventListener('click', function() {
+            showToast('Help center coming soon!', 'info');
+        });
 
         // Notification banner
         document.getElementById('enableNotificationsBtn').addEventListener('click', requestNotificationPermission);
@@ -4741,6 +5121,7 @@
                 closeCardModal();
                 closeCardActionsModal();
                 hideConfirmModal();
+                closeAccountModal();
             }
             if ((e.ctrlKey || e.metaKey) && e.key === 'n') {
                 e.preventDefault();
@@ -4804,7 +5185,6 @@
         console.log('✅ CardGuard ready!', { cards: state.cards.length, permission: Notification.permission });
     }
 
-    
     // ========================================
     // START APPLICATION
     // ========================================
